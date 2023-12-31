@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "neopixelSpectrumDisplay",
+			"path": ".."
+		},
+		{
+			"name": "231230-221947-espidf-blink",
+			"path": "C:/Users/yuann/Documents/PlatformIO/Projects/231230-221947-espidf-blink"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"sdkconfig.h": "c"
+		}
+	}
+}
