@@ -1,0 +1,1 @@
+"C:\Program Files\mosquitto\mosquitto" -v -c audio_spectrum_display.conf
