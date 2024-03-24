@@ -2,14 +2,14 @@
  * ****************************************
  * @file    gpioHAL.h
  * @author  Yuan Nevin Biju
- * @brief   Header file for GPIO HAL interface functions
+ * @brief   This file contains GPIO HAL interface functions
  * @date    2023-12-31
  * 
  * @copyright Copyright (c) 2023
  * ********************/
 
-#ifndef H_GPIOHAL_INC
-#define H_GPIOHAL_INC
+#ifndef H_GPIO_HAL_INC
+#define H_GPIO_HAL_INC
 /* ****************************************
  * Includes
  * ********************/
@@ -34,9 +34,9 @@ typedef struct{
 /* ****************************************
  * Function Declarations
  * ********************/
-error_flag_t gpio_init(gpio_list_t, uint8_t);
-error_flag_t gpio_set(gpio_list_t);
-error_flag_t gpio_reset(gpio_list_t);
-error_flag_t gpio_toggle(gpio_list_t);
+error_flag_t gpio_hal_init(gpio_list_t);
+error_flag_t gpio_hal_set(gpio_list_t);
+error_flag_t gpio_hal_reset(gpio_list_t);
+error_flag_t gpio_hal_toggle(gpio_list_t);
 
 #endif

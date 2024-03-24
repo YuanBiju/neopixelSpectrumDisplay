@@ -15,6 +15,8 @@
 #include "lwip/err.h" //light weight ip packets error handling
 #include "lwip/sys.h" //system applications for light weight ip apps
 
+#include "gpioHAL/gpioHAL.h"
+
 #define NUM_LEDS 60
 
 uint32_t stripNums = 3;
@@ -97,90 +99,6 @@ void delay(uint32_t usDelay){
         while(usDelay --);
 }
 
-void set_led_colour(uint8_t redValue, uint8_t greenValue, uint8_t blueValue){
-
-        neoPixelRGBValue_u uRGBValue = {0};
-
-        neopixelRGBValue_s sRGBValue = {.redValue = redValue, .greenValue = greenValue, .blueValue = blueValue};
-
-        uRGBValue.RGBValue = sRGBValue;
-
-        uint16_t count = 24;
-
-        // for(uint16_t ledNum = 0; ledNum<NUM_LEDS)
-        while(count--){
-                
-                if(uRGBValue.ui32RGBValue&(1<<(24-count))){
-                        gpio_set_level(NEOPIXEL_GPIO, 1);
-                        for(int i = 0;i<10 ;i++);
-                        gpio_set_level(NEOPIXEL_GPIO, 0);
-                }
-                else{
-                        gpio_set_level(NEOPIXEL_GPIO, 1);
-                        gpio_set_level(NEOPIXEL_GPIO, 0);
-                }
-        }
-}
-
-// void set_strip_colour(){
-
-//         neoPixelRGBValue_u uRGBValue = {0};
-
-//         neopixelRGBValue_s sRGBValue = {.redValue = redValue, .greenValue = greenValue, .blueValue = blueValue};
-
-//         uRGBValue.RGBValue = sRGBValue;
-
-//         uint16_t count = 24;
-
-//         // for(uint16_t ledNum = 0; ledNum<NUM_LEDS)
-//         while(count--){
-                
-//                 if(uRGBValue.ui32RGBValue&(1<<(24-count))){
-//                         gpio_set_level(NEOPIXEL_GPIO, 1);
-//                         for(int i = 0;i<10 ;i++);
-//                         gpio_set_level(NEOPIXEL_GPIO, 0);
-//                 }
-//                 else{
-//                         gpio_set_level(NEOPIXEL_GPIO, 1);
-//                         gpio_set_level(NEOPIXEL_GPIO, 0);
-//                 }
-//         }
-// }
-
-void hsv_to_rgb(uint8_t h, uint8_t s, uint8_t v, uint8_t *r, uint8_t *g, uint8_t *b) {
-    uint16_t sector = h / 43; // 0 to 5
-    uint8_t remainder = (h - (sector * 43)) * 6; // 0 to 252
-
-    uint8_t p = (v * (255 - s)) >> 8;
-    uint8_t q = (v * (255 - ((s * remainder) >> 8))) >> 8;
-    uint8_t t = (v * (255 - ((s * (255 - remainder)) >> 8))) >> 8;
-
-    switch (sector) {
-        case 0: *r = v; *g = t; *b = p; break;
-        case 1: *r = q; *g = v; *b = p; break;
-        case 2: *r = p; *g = v; *b = t; break;
-        case 3: *r = p; *g = q; *b = v; break;
-        case 4: *r = t; *g = p; *b = v; break;
-        default: *r = v; *g = p; *b = q; break;
-    }
-}
-void neopixel_animation() {
-    uint8_t hue = 0;
-
-    while (1) {
-        for (int i = 0; i < NUM_LEDS; i++) {
-            uint8_t red, green, blue;
-
-            // Generate color based on hue
-            hsv_to_rgb(hue, 255, 255, &red, &green, &blue);
-
-            set_led_colour(red, green, blue);
-            vTaskDelay(5 / portTICK_PERIOD_MS);  // Adjust the delay for the animation speed
-        }
-        hue += 1;  // Increment hue for the next LED
-    }
-}
-
 const char *ssid = "BIJU MIHANA-2.4G";
 const char *pass = "22552255";
 int retry_num=0;
@@ -238,14 +156,12 @@ void wifi_connection()
 
 void app_main() {
 
+        gpio_hal_init(E_GPIO_NEOPIXEL);
+
         nvs_flash_init(); //keeps stored important wifi configs like ssid and password also mqtt configs code will not work without it
-        wifi_connection(); // connects to wifi 
-        vTaskDelay(10000 /portTICK_PERIOD_MS); //delay is important cause we need to let it connect to wifi 
-        mqtt_initialize();
+        wifi_connection(); // connects to wifi
 
         while(1){
-                // esp_mqtt_client_subscribe(client, "your-topic", 1);
-                // printf("%d",20);
                 vTaskDelay((1000)/portTICK_RATE_MS);
         }
 }
