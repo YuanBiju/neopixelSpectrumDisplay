@@ -2,50 +2,60 @@
  * ****************************************
  * @file    neopixelLED.h
  * @author  Yuan Nevin Biju
- * @brief   Header file for neopixel LED interface functions
+ * @brief   This file contains neopixel LED interface functions.
  * ********************/
 
+#ifndef H_GPIO_HAL_INC
+#define H_GPIO_HAL_INC
 /* ****************************************
  * Includes
  * ********************/
-#include "gpioHAL.h"
+#include "esp_err.h"
 
 /* ****************************************
- * Defines
+ * Enums
  * ********************/
-#define NEOPIXEL_GPIO_PIN_NUMBER    4
-#define NEOPIXEL_GPIO_MODE          GPIO_MODE_OUTPUT
+
 
 /* ****************************************
- * Data
+ * Struct
  * ********************/
-static gpio_config_t gpioTable[E_GPIO_MAX] = {
-    {NEOPIXEL_GPIO_PIN_NUMBER, NEOPIXEL_GPIO_MODE},
-}
+#define NUM_LEDS 60
+
+uint32_t stripNums = 3;
+
+typedef struct{
+        uint8_t redValue;
+        uint8_t greenValue;
+        uint8_t blueValue;
+}neopixelRGBValue_s;
+
+typedef union{
+      neopixelRGBValue_s RGBValue;
+      uint32_t ui32RGBValue;  
+}neoPixelRGBValue_u;
+
+typedef struct{
+        
+        uint8_t rangeNum;
+
+        uint8_t rangeUpperLimit;
+
+        neopixelRGBValue_s rgbValue;
+
+}range_define_s;
+
+range_define_s rangeTable[NUM_LEDS] = {
+    {0, 20, {255, 0, 0}},
+    {1, 20, {0, 255, 0}},
+    {2, 20, {0, 0, 255}},
+};
 
 /* ****************************************
- * Function Definitions
+ * Function Declarations
  * ********************/
-/**
- * @brief   Initialize GPIO pin
- * @param   gpioInstance Enumerated GPIO instance
- * @retval  error_flag_t Returns E_ERROR_FLAG if any errors occur else returns E_OK_FLAG
-*/
-error_flag_t gpio_hal_init(gpio_list_t gpioInstance){
-    /**Select NEOPIXEL GPIO*/
-    gpio_pad_select_gpio(gpioTable[E_GPIO_NEOPIXEL].gpioNumber);
-    /**Set the GPIO as a push/pull output */
-    gpio_set_direction(gpioTable[E_GPIO_NEOPIXEL].gpioNumber, gpioTable[E_GPIO_NEOPIXEL].gpioMode);
-}
+void set_led_colour(uint8_t redValue, uint8_t greenValue, uint8_t blueValue);
+void hsv_to_rgb(uint8_t h, uint8_t s, uint8_t v, uint8_t *r, uint8_t *g, uint8_t *b);
+void neopixel_animation();
 
-error_flag_t gpio_hal_set(gpio_list_t gpioInstance){
-
-}
-
-error_flag_t gpio_hal_reset(gpio_list_t gpioInstance){
-
-}
-
-error_flag_t gpio_hal_toggle(gpio_list_t gpioInstance){
-    
-}
+#endif

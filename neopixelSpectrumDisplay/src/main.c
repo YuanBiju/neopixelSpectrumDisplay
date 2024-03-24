@@ -16,37 +16,7 @@
 #include "lwip/sys.h" //system applications for light weight ip apps
 
 #include "gpioHAL/gpioHAL.h"
-
-#define NUM_LEDS 60
-
-uint32_t stripNums = 3;
-
-typedef struct{
-        uint8_t redValue;
-        uint8_t greenValue;
-        uint8_t blueValue;
-}neopixelRGBValue_s;
-
-typedef union{
-      neopixelRGBValue_s RGBValue;
-      uint32_t ui32RGBValue;  
-}neoPixelRGBValue_u;
-
-typedef struct{
-        
-        uint8_t rangeNum;
-
-        uint8_t rangeUpperLimit;
-
-        neopixelRGBValue_s rgbValue;
-
-}range_define_s;
-
-range_define_s rangeTable[NUM_LEDS] = {
-    {0, 20, {255, 0, 0}},
-    {1, 20, {0, 255, 0}},
-    {2, 20, {0, 0, 255}},
-};
+#include "neopixelLED/neopixelLED.h"
 
 static void mqtt_event_handler(esp_mqtt_event_handle_t event){ //here esp_mqtt_event_handle_t is a struct which receieves struct event from mqtt app start funtion
         esp_mqtt_client_handle_t client = event->client; //making obj client of struct esp_mqtt_client_handle_t and assigning it the receieved event client

@@ -10,7 +10,7 @@
 /* ****************************************
  * Includes
  * ********************/
-#include "neopixelLED.h"
+#include "neopixelLED/neopixelLED.h"
 
 /* ****************************************
  * Defines
