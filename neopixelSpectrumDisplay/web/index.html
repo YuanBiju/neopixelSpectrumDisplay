@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Set Timer</title>
+</head>
+<body>
+    <h2>Set Timer</h2>
+    <form action="/set-timer" method="POST">
+        <label for="timer">Timer (hrs:mins:seconds):</label>
+        <input type="text" id="timer" name="timer" pattern="[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]" required>
+        <br><br>
+        <input type="submit" value="Set Timer">
+    </form>
+</body>
+</html>

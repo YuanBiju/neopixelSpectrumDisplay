@@ -10,7 +10,8 @@
 /* ****************************************
  * Includes
  * ********************/
-#include "driver/gpio.h"
+#include "rom/gpio.h"
+#include "hal/gpio_types.h"
 #include "esp_err.h"
 
 /* ****************************************
@@ -33,8 +34,9 @@ typedef struct{
  * Function Declarations
  * ********************/
 esp_err_t gpio_hal_init(gpio_list_t);
+
 esp_err_t gpio_hal_set(gpio_list_t);
+
 esp_err_t gpio_hal_reset(gpio_list_t);
-esp_err_t gpio_hal_toggle(gpio_list_t);
 
 #endif
