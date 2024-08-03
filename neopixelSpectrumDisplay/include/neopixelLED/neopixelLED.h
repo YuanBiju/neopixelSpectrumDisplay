@@ -14,6 +14,10 @@
 
 #define NUM_LEDS 60
 
+#define STRIP_LED_COUNT_MAX 60
+
+#define INVALID_STRIP_ID -1
+
 typedef struct{
         uint8_t redValue;
         uint8_t greenValue;
@@ -26,14 +30,10 @@ typedef union{
 }neoPixelRGBValue_u;
 
 typedef struct{
-        
-        uint8_t rangeNum;
-
-        uint8_t rangeUpperLimit;
-
+        uint8_t LedStripId;
+        uint8_t stripLedCount;
         neopixelRGBValue_s rgbValue;
-
-}range_define_s;
+}led_strip_s;
 
 /* ****************************************
  * Function Declarations

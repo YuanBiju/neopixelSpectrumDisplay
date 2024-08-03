@@ -48,8 +48,8 @@ esp_err_t http_server_register_routes(httpd_handle_t* handle) {
 }
 
 static esp_err_t http_route_index_html_get(httpd_req_t* req) {
-    HTTP_RETURN_ON_ERROR(req, http_assert_in_header(req, "Accept-Encoding", "gzip"), TAG, "browser does not accept gzip encoding");
-    HTTP_RETURN_ON_ERROR(req, httpd_resp_set_hdr(req, "Content-Encoding", "gzip"), TAG, "failed to set header");
+    // ESP_RETURN_ON_ERROR(http_assert_in_header(req, "Accept-Encoding", "gzip"), TAG, "browser does not accept gzip encoding");
+    ESP_RETURN_ON_ERROR(httpd_resp_set_hdr(req, "Content-Encoding", "gzip"), TAG, "failed to set header");
 
     return http_server_send_binary_response(req, "text/html", g_index_start, g_index_end);
 }

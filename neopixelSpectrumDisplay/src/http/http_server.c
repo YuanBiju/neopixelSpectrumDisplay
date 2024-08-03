@@ -19,7 +19,7 @@ static const char* TAG = "http_server";
 static httpd_handle_t http_server_start_webserver(void);
 
 esp_err_t http_server_init(void){
-    ESP_ERROR_CHECK(http_server_start_webserver());
+    http_server_start_webserver();
     return ESP_OK;
 }
 
@@ -50,7 +50,7 @@ static httpd_handle_t http_server_start_webserver(void){
 
     /* Start the httpd server */
     if (httpd_start(&server, &config) == ESP_OK){
-        http_routes_register_routes(&server);
+        http_server_register_routes(&server);
     }
     /* If server failed to start, handle will be NULL */
     return server;

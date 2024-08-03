@@ -16,10 +16,11 @@
 #define NEOPIXEL_T0H_LOOP_COUNT     7
 #define NEOPIXEL_TOTAL_BIT_COUNT    24
 
-range_define_s rangeTable[NUM_LEDS] = {
+led_strip_s rangeTable[NUM_LEDS] = {
     {0, 20, {255, 0, 0}},
-    {1, 20, {0, 255, 0}},
-    {2, 20, {0, 0, 255}},
+    {0, 20, {0, 255, 0}},
+    {0, 20, {0, 0, 255}},
+    {INVALID_STRIP_ID, 20, {0, 0, 255}},
 };
 
 uint32_t stripNums = 3;
@@ -30,32 +31,39 @@ neopixelRGBValue_s sRGBValue;
 
 static void hsv_to_rgb(uint8_t, uint8_t, uint8_t, uint8_t *, uint8_t *, uint8_t *);
 static void neopixelLED_animation(void* params);
-static void set_led_colour(uint8_t, uint8_t, uint8_t);
+static void neopixelLED_set_led_colour(uint8_t, uint8_t, uint8_t);
 
 void neopixelLED_init(){
     xTaskCreate(neopixelLED_animation, "neopixel_animation", 1024, NULL, tskIDLE_PRIORITY, NULL);
 }
 
+void neopixelLED_setStripColor(){
+
+}
+
+void neopixelLED_applyStripColor(){
+
+}
+
 static void neopixelLED_animation(void* params){
-    uint8_t hue = 0;
-
     while (1) {
-        uint16_t count = NEOPIXEL_TOTAL_BIT_COUNT;
-
-        while(count--){
-                
-                if(uRGBValue.ui32RGBValue&(1<<(NEOPIXEL_TOTAL_BIT_COUNT-count))){
-                        gpio_hal_set(E_GPIO_NEOPIXEL);
-                        for(int i = 0;i < NEOPIXEL_T0H_LOOP_COUNT ;i++);
-                        gpio_hal_reset(E_GPIO_NEOPIXEL);
-                }
-                else{
-                        gpio_hal_set(E_GPIO_NEOPIXEL);
-                        gpio_hal_reset(E_GPIO_NEOPIXEL);
-                }
+        for(uint8_t ledGroupIndex = 0; ledGroupIndex < NUM_LEDS; ledGroupIndex++){
+            if(INVALID_STRIP_ID == rangeTable[ledGroupIndex].LedStripId){
+                break;
+            }
+            for(uint8_t ledCount = 0; ledCount < rangeTable[ledGroupIndex].stripLedCount; ledCount++){
+                neopixelLED_set_led_colour(rangeTable[ledGroupIndex].rgbValue.redValue,rangeTable[ledGroupIndex].rgbValue.greenValue,rangeTable[ledGroupIndex].rgbValue.blueValue);
+            }
         }
-
-        vTaskDelay(1);  // Adjust the delay for the animation speed
+        for(uint8_t ledGroupIndex = 0; ledGroupIndex < NUM_LEDS; ledGroupIndex++){
+                rangeTable[ledGroupIndex].
+                break;
+            }
+            for(uint8_t ledCount = 0; ledCount < rangeTable[ledGroupIndex].stripLedCount; ledCount++){
+                neopixelLED_set_led_colour(rangeTable[ledGroupIndex].rgbValue.redValue,rangeTable[ledGroupIndex].rgbValue.greenValue,rangeTable[ledGroupIndex].rgbValue.blueValue);
+            }
+        }
+        vTaskDelay(1000);  // Adjust the delay for the animation speed
     }
 }
 
@@ -65,6 +73,21 @@ void neopixelLED_set_led_colour(uint8_t redValue, uint8_t greenValue, uint8_t bl
     sRGBValue.blueValue = blueValue;
 
     uRGBValue.RGBValue = sRGBValue;
+
+    uint16_t count = NEOPIXEL_TOTAL_BIT_COUNT;
+        
+    while(count--){
+            
+            if(uRGBValue.ui32RGBValue&(1<<(NEOPIXEL_TOTAL_BIT_COUNT-count))){
+                    gpio_hal_set(E_GPIO_NEOPIXEL);
+                    for(int i = 0;i < NEOPIXEL_T0H_LOOP_COUNT ;i++);
+                    gpio_hal_reset(E_GPIO_NEOPIXEL);
+            }
+            else{
+                    gpio_hal_set(E_GPIO_NEOPIXEL);
+                    gpio_hal_reset(E_GPIO_NEOPIXEL);
+            }
+    }
 }
 
 // void set_strip_colour(){
